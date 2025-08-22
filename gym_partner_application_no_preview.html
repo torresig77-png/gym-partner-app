@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gym Partner Application — Now Hiring (1)</title>
+  <meta name="description" content="Apply to be my gym partner. Limited headcount. Must love PRs and post-lift tacos.">
+  <meta property="og:title" content="Gym Partner Application — Now Hiring (1)">
+  <meta property="og:description" content="Perks include: elite spotting, PR hype, and post-lift tacos. Apply now.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="data:image/svg+xml;charset=UTF-8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%25' height='100%25' fill='black'/><text x='50%25' y='50%25' fill='white' font-size='56' font-family='Arial' text-anchor='middle' dominant-baseline='middle'>Gym Partner Application</text></svg>">
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --card: #15151c;
+      --muted: #9aa0a6;
+      --text: #e8eaed;
+      --accent: #8be28b;
+      --danger: #ff6b6b;
+      --pill: #1f2a1f;
+      --border: #2a2a36;
+      --input: #101017;
+      --btn: #20202a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(1000px 600px at 10% -10%, #111122 0%, #0b0b0f 40%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.4;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: linear-gradient(180deg, #15151c, #121219);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .glow {
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(closest-side, rgba(139,226,139,0.08), transparent 70%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    header {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .logo {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      background: conic-gradient(from 120deg, #2b2b3a, #1b1b26 50%, #2b2b3a);
+      border: 1px solid var(--border);
+      font-weight: 800;
+    }
+    .title-wrap h1 {
+      font-size: 1.15rem;
+      margin: 0;
+    }
+    .subtitle {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .pillbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 20px;
+    }
+    .pill {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #12121a;
+      color: var(--muted);
+    }
+    .pill.ok { background: var(--pill); color: var(--accent); border-color: #253125; }
+    .section {
+      padding: 14px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.01);
+    }
+    h2 {
+      font-size: 0.98rem; margin: 0 0 10px 0;
+    }
+    ul {
+      margin: 8px 0 0 16px;
+      color: var(--muted);
+    }
+    label { display: block; font-size: 0.92rem; margin: 8px 0 6px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 12px;
+      background: var(--input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      outline: none;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .actions {
+      display: flex; gap: 10px; align-items: center; margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--btn);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: transform .04s ease, background .2s;
+      user-select: none;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: linear-gradient(180deg, #2a2a3a, #1f1f2a); }
+    .btn.success { background: linear-gradient(180deg, #1f2a24, #162018); color: var(--accent); border-color: #253125; }
+    .tiny { font-size: 0.8rem; color: var(--muted); }
+    .divider { height: 1px; background: var(--border); margin: 14px 0; }
+    .footnotes { font-size: 0.82rem; color: var(--muted); }
+    .heart { color: var(--danger); }
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .confetti span {
+      position: absolute;
+      font-size: 20px;
+      animation: fall 1.8s linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(480deg);
+        opacity: 0;
+      }
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 20px;
+      background: #0f1a11;
+      color: var(--accent);
+      border: 1px solid #253125;
+      border-radius: 10px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.35);
+      display: none;
+    }
+    .approved {
+      display: none;
+      text-align: center;
+      padding: 20px 14px;
+      border: 1px solid #253125;
+      border-radius: 12px;
+      background: rgba(139, 226, 139, 0.06);
+      color: var(--accent);
+      margin-top: 12px;
+    }
+    .approved h3 { margin: 0 0 8px 0; }
+    .note {
+      font-size: 0.86rem; color: var(--muted); margin-top: 6px;
+    }
+    .fake-captcha {
+      display: flex; gap: 8px; align-items: center; margin-top: 10px;
+      font-size: 0.88rem; color: var(--muted);
+    }
+    .checkbox {
+      inline-size: 18px; block-size: 18px; border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--input);
+      display: grid; place-items: center;
+      cursor: pointer;
+    }
+    .checkbox.checked { background: #172117; border-color: #2b3b2b; color: var(--accent); }
+    .beta-tag { font-size: 0.72rem; color: var(--muted); margin-left: 6px; }
+    .footgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 560px) {
+      .row, .footgrid { grid-template-columns: 1fr; }
+    }
+    .link-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    .link-row code { background: #101017; border: 1px solid var(--border); padding: 6px 8px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="glow"></div>
+    <header>
+      <div class="logo">🏋️‍♂️</div>
+      <div class="title-wrap">
+        <h1>Gym Partner Application</h1>
+        <div class="subtitle">Now accepting <b>exactly 1</b> elite candidate. Position closes when vibes are immaculate.</div>
+      </div>
+    </header>
+
+    <div class="pillbar">
+      <span class="pill ok">Status: OPEN</span>
+      <span class="pill">Pay: High-fives &amp; post-lift tacos</span>
+      <span class="pill">Location: Wherever the good lighting is</span>
+    </div>
+
+    <div class="section">
+      <h2>Role &amp; Requirements</h2>
+      <ul>
+        <li>Must hype PRs like it’s the Super Bowl.</li>
+        <li>Understands <em>“one more set”</em> could mean eight.</li>
+        <li>Comfortable filming cinematic 0.5x angles.</li>
+        <li>Availability for rogue ice cream runs after leg day.</li>
+      </ul>
+    </div>
+
+    <form id="appForm" class="section" onsubmit="return false;">
+      <h2>Your Application</h2>
+      <div class="row">
+        <div>
+          <label>Name</label>
+          <input id="name" placeholder="First name works 😉" required>
+        </div>
+        <div>
+          <label>Preferred Gym</label>
+          <input id="gym" placeholder="LA Fitness / Equinox / Garage">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Favorite Post-Lift Meal</label>
+          <input id="meal" placeholder="Tacos, obviously">
+        </div>
+        <div>
+          <label>Spotting Style</label>
+          <select id="spot">
+            <option value="hype">Aggressive hype (screams optional)</option>
+            <option value="calm">Zen spotter (calm & composed)</option>
+            <option value="cinematic">I film & spot at the same time</option>
+          </select>
+        </div>
+      </div>
+      <label>Quick Pitch</label>
+      <textarea id="pitch" rows="3" placeholder="Why should you be chosen? 1–2 spicy sentences."></textarea>
+
+      <div class="fake-captcha">
+        <div id="check" class="checkbox" onclick="toggleCheck()">✓</div>
+        <span>I am not a robot, except for leg press reps.</span>
+      </div>
+
+      <div class="actions">
+        <button id="applyBtn" class="btn primary">Apply Now</button>
+        <button type="button" id="luckyBtn" class="btn">I’m Feeling Swole</button>
+        <span class="tiny beta-tag">v1.0 • may contain excessive gains</span>
+      </div>
+
+      <div id="approved" class="approved">
+        <h3>✅ Application Approved</h3>
+        <div id="approvedText">Welcome aboard! Text me “You’re hired.” to start onboarding.</div>
+        <div class="note">Position: <b>Gym Partner</b>, Start date: <b>ASAP</b>, Dress code: <b>All black + good shoes</b></div>
+      </div>
+    </form>
+
+    <div class="divider"></div>
+
+    <div class="footgrid">
+      <div class="section">
+        <h2>Perks</h2>
+        <ul>
+          <li>Elite spotting + top-tier gym memes.</li>
+          <li>Guaranteed 12% increase in average vibe.</li>
+          <li>Optional Sunday walks to discuss deload philosophies.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Small Print</h2>
+        <div class="footnotes">
+          By applying you agree to: sharing playlists, celebrating small wins,
+          and pretending <i>“last set”</i> means anything. No reps were harmed in the making of this page.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+  <div id="toast" class="toast">Processing application…</div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const confetti = $("#confetti");
+    const toast = $("#toast");
+    const approved = $("#approved");
+    const nameEl = $("#name");
+    const applyBtn = $("#applyBtn");
+    const luckyBtn = $("#luckyBtn");
+    let checked = false;
+
+    function toggleCheck() {
+      checked = !checked;
+      $("#check").classList.toggle("checked", checked);
+    }
+
+    function showToast(msg, color) {
+      toast.textContent = msg;
+      if (color) {
+        toast.style.color = color;
+      } else {
+        toast.style.color = "#8be28b";
+      }
+      toast.style.display = "block";
+      setTimeout(() => toast.style.display = "none", 1300);
+    }
+
+    function burstConfetti() {
+      const emojis = ["🏋️‍♂️","✨","🔥","💪","🥇","🎉","🏆","⚡️","🦾"];
+      for (let i = 0; i < 60; i++) {
+        const s = document.createElement("span");
+        s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        s.style.left = Math.random() * 100 + "vw";
+        s.style.top = "-5vh";
+        s.style.transform = "translateY(0)";
+        s.style.animationDuration = (1.2 + Math.random()*1.2) + "s";
+        confetti.appendChild(s);
+        setTimeout(() => s.remove(), 2500);
+      }
+    }
+
+    function approve() {
+      const name = (nameEl.value || "You").trim();
+      $("#approvedText").innerHTML = `Congrats, <b>${name}</b>. Position filled. Text me “You’re hired.” to lock it in.`;
+      approved.style.display = "block";
+      burstConfetti();
+      showToast("Approved ✔︎");
+    }
+
+    function processApplication() {
+      if (!checked) {
+        showToast("Please confirm you are not a robot (or at least a friendly one).", "#ff6b6b");
+        return;
+      }
+      approved.style.display = "none";
+      showToast("Processing application…");
+      applyBtn.disabled = true;
+      luckyBtn.disabled = true;
+      setTimeout(() => {
+        approve();
+        applyBtn.disabled = false;
+        luckyBtn.disabled = false;
+      }, 1100);
+    }
+
+    applyBtn.addEventListener("click", processApplication);
+    luckyBtn.addEventListener("click", approve);
+
+    // Personalize headline from URL ?name=
+    const params = new URLSearchParams(window.location.search);
+    const pName = params.get("name");
+    if (pName) {
+      nameEl.value = pName;
+    }
+  </script>
+</body>
+</html>
